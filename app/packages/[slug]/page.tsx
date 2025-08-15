@@ -157,7 +157,6 @@ export default function PackagePage({
                     <Calendar className="h-4 w-4 mr-1" />
                     <span>{packageData.duration} days</span>
                   </div>
-              
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-3xl font-bold">
@@ -552,7 +551,6 @@ export default function PackagePage({
                           <h3 className="font-bold text-lg text-blue-600">
                             {pkg.title}
                           </h3>
-                         
                         </div>
                         <div className="flex items-center text-gray-600 mb-3">
                           <MapPin className="h-4 w-4 mr-1 flex-shrink-0" />

@@ -131,7 +131,6 @@ const PackageCard = ({ pkg }: { pkg: (typeof packagesData)[0] }) => (
         <h3 className="font-bold text-lg text-blue-600 line-clamp-2">
           {pkg.title}
         </h3>
-       
       </div>
       <div className="flex items-center text-gray-600 mb-3">
         <MapPin className="h-4 w-4 mr-1 flex-shrink-0" />
@@ -400,7 +399,7 @@ export default function PackagesPage() {
                 onPageChange={handlePageChange}
               />
             </TabsContent>
-             <TabsContent value="europe" className="space-y-8">
+            <TabsContent value="europe" className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {paginatedPackages.map((pkg) => (
                   <PackageCard key={pkg.id} pkg={pkg} />

@@ -1,21 +1,23 @@
-import Link from "next/link"
-import Image from "next/image"
-import { ChevronRight, MapPin, Star, Users, Calendar } from "lucide-react"
+import Link from "next/link";
+import Image from "next/image";
+import { ChevronRight, MapPin, Star, Users, Calendar } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Navbar } from "@/components/navbar"
-import packagesData from "@/data/packages.json"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Navbar } from "@/components/navbar";
+import packagesData from "@/data/packages.json";
 
 export default function HomePage() {
   // Get only 3 featured packages for better performance
   const featuredPackages = {
-    "Southeast Asia": packagesData.filter((pkg) => pkg.region === "Southeast Asia").slice(0, 3), // 2 from Southeast Asia
-    "India": packagesData.filter((pkg) => pkg.region === "India").slice(0, 3), // 1 from South Asia
-  }
+    "Southeast Asia": packagesData
+      .filter((pkg) => pkg.region === "Southeast Asia")
+      .slice(0, 3), // 2 from Southeast Asia
+    India: packagesData.filter((pkg) => pkg.region === "India").slice(0, 3), // 1 from South Asia
+  };
 
   // Popular destinations based on our 4 countries
   const popularDestinations = [
@@ -43,7 +45,7 @@ export default function HomePage() {
       image: "/delhibg1.jpg",
       searchQuery: "india",
     },
-  ]
+  ];
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -66,11 +68,15 @@ export default function HomePage() {
                 Discover the World's Most Amazing Places
               </h1>
               <p className="text-lg md:text-xl">
-                Find and book your perfect travel experience with our curated packages to destinations worldwide.
+                Find and book your perfect travel experience with our curated
+                packages to destinations worldwide.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/packages">
-                  <Button size="lg" className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white">
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white"
+                  >
                     Explore Packages
                   </Button>
                 </Link>
@@ -89,11 +95,18 @@ export default function HomePage() {
         <section className="container py-8 md:py-12">
           <div className="flex flex-col md:flex-row justify-between items-center mb-8">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight text-blue-600">Popular Destinations</h2>
-              <p className="text-gray-600 mt-2">Explore our most sought-after travel locations</p>
+              <h2 className="text-3xl font-bold tracking-tight text-blue-600">
+                Popular Destinations
+              </h2>
+              <p className="text-gray-600 mt-2">
+                Explore our most sought-after travel locations
+              </p>
             </div>
             <Link href="/packages">
-              <Button variant="link" className="hidden md:flex items-center text-blue-600">
+              <Button
+                variant="link"
+                className="hidden md:flex items-center text-blue-600"
+              >
                 View all destinations <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
             </Link>
@@ -101,7 +114,13 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {popularDestinations.map((destination, index) => (
-              <Link href={`/search?q=${encodeURIComponent(destination.searchQuery)}`} key={index} className="group">
+              <Link
+                href={`/search?q=${encodeURIComponent(
+                  destination.searchQuery
+                )}`}
+                key={index}
+                className="group"
+              >
                 <div className="relative overflow-hidden rounded-lg shadow-md border border-blue-100">
                   <div className="aspect-[3/4]">
                     <Image
@@ -127,7 +146,10 @@ export default function HomePage() {
 
           <div className="flex justify-center mt-8 md:hidden">
             <Link href="/packages">
-              <Button variant="outline" className="border-blue-500 text-blue-600 hover:bg-blue-50 bg-transparent">
+              <Button
+                variant="outline"
+                className="border-blue-500 text-blue-600 hover:bg-blue-50 bg-transparent"
+              >
                 View All Destinations
               </Button>
             </Link>
@@ -137,9 +159,12 @@ export default function HomePage() {
         <section className="bg-blue-50 py-12 md:py-16">
           <div className="container">
             <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold tracking-tight text-blue-600">Featured Travel Packages</h2>
+              <h2 className="text-3xl font-bold tracking-tight text-blue-600">
+                Featured Travel Packages
+              </h2>
               <p className="text-gray-600 mt-2 max-w-2xl mx-auto">
-                Discover our carefully curated travel experiences for your next adventure
+                Discover our carefully curated travel experiences for your next
+                adventure
               </p>
             </div>
 
@@ -183,12 +208,15 @@ export default function HomePage() {
                       </div>
                       <CardContent className="p-5">
                         <div className="flex justify-between items-start mb-2">
-                          <h3 className="font-bold text-lg text-blue-600">{pkg.title}</h3>
-                          
+                          <h3 className="font-bold text-lg text-blue-600">
+                            {pkg.title}
+                          </h3>
                         </div>
                         <div className="flex items-center text-gray-600 mb-3">
                           <MapPin className="h-4 w-4 mr-1" />
-                          <span className="text-sm">{pkg.nation.join(", ")}</span>
+                          <span className="text-sm">
+                            {pkg.nation.join(", ")}
+                          </span>
                         </div>
                         <div className="flex items-center gap-4 text-sm mb-4">
                           <div className="flex items-center">
@@ -202,11 +230,19 @@ export default function HomePage() {
                         </div>
                         <div className="flex justify-between items-center">
                           <div>
-                            <span className="text-xl font-bold text-blue-600">₹{pkg.price.toLocaleString()}</span>
-                            <span className="text-gray-600 text-sm"> / person</span>
+                            <span className="text-xl font-bold text-blue-600">
+                              ₹{pkg.price.toLocaleString()}
+                            </span>
+                            <span className="text-gray-600 text-sm">
+                              {" "}
+                              / person
+                            </span>
                           </div>
                           <Link href={`/packages/${pkg.slug}`}>
-                            <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white">
+                            <Button
+                              size="sm"
+                              className="bg-orange-500 hover:bg-orange-600 text-white"
+                            >
                               View Details
                             </Button>
                           </Link>
@@ -217,7 +253,10 @@ export default function HomePage() {
                 </div>
                 <div className="flex justify-center">
                   <Link href="/packages?region=southeast-asia">
-                    <Button variant="outline" className="border-blue-500 text-blue-600 hover:bg-blue-50 bg-transparent">
+                    <Button
+                      variant="outline"
+                      className="border-blue-500 text-blue-600 hover:bg-blue-50 bg-transparent"
+                    >
                       View All Southeast Asia Packages
                     </Button>
                   </Link>
@@ -246,7 +285,9 @@ export default function HomePage() {
                       </div>
                       <CardContent className="p-5">
                         <div className="flex justify-between items-start mb-2">
-                          <h3 className="font-bold text-lg text-blue-600">{pkg.title}</h3>
+                          <h3 className="font-bold text-lg text-blue-600">
+                            {pkg.title}
+                          </h3>
                           <div className="flex items-center">
                             <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                             <span className="text-sm ml-1">{pkg.rating}</span>
@@ -254,7 +295,9 @@ export default function HomePage() {
                         </div>
                         <div className="flex items-center text-gray-600 mb-3">
                           <MapPin className="h-4 w-4 mr-1" />
-                          <span className="text-sm">{pkg.nation.join(", ")}</span>
+                          <span className="text-sm">
+                            {pkg.nation.join(", ")}
+                          </span>
                         </div>
                         <div className="flex items-center gap-4 text-sm mb-4">
                           <div className="flex items-center">
@@ -268,11 +311,19 @@ export default function HomePage() {
                         </div>
                         <div className="flex justify-between items-center">
                           <div>
-                            <span className="text-xl font-bold text-blue-600">₹{pkg.price.toLocaleString()}</span>
-                            <span className="text-gray-600 text-sm"> / person</span>
+                            <span className="text-xl font-bold text-blue-600">
+                              ₹{pkg.price.toLocaleString()}
+                            </span>
+                            <span className="text-gray-600 text-sm">
+                              {" "}
+                              / person
+                            </span>
                           </div>
                           <Link href={`/packages/${pkg.slug}`}>
-                            <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white">
+                            <Button
+                              size="sm"
+                              className="bg-orange-500 hover:bg-orange-600 text-white"
+                            >
                               View Details
                             </Button>
                           </Link>
@@ -283,7 +334,10 @@ export default function HomePage() {
                 </div>
                 <div className="flex justify-center">
                   <Link href="/packages?region=India">
-                    <Button variant="outline" className="border-blue-500 text-blue-600 hover:bg-blue-50 bg-transparent">
+                    <Button
+                      variant="outline"
+                      className="border-blue-500 text-blue-600 hover:bg-blue-50 bg-transparent"
+                    >
                       View All India's Packages
                     </Button>
                   </Link>
@@ -460,7 +514,8 @@ export default function HomePage() {
                 <span className="text-white">Trip</span>
               </div>
               <p className="text-white/80 mb-4">
-                Your trusted partner for unforgettable travel experiences around the world.
+                Your trusted partner for unforgettable travel experiences around
+                the world.
               </p>
               <div className="flex gap-4">
                 <Link href="#" className="text-white/80 hover:text-white">
@@ -492,7 +547,14 @@ export default function HomePage() {
                     strokeLinejoin="round"
                     className="h-5 w-5"
                   >
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <rect
+                      x="2"
+                      y="2"
+                      width="20"
+                      height="20"
+                      rx="5"
+                      ry="5"
+                    ></rect>
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                   </svg>
@@ -607,7 +669,9 @@ export default function HomePage() {
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                     <circle cx="12" cy="10" r="3"></circle>
                   </svg>
-                  <span className="text-white/80">123 Travel Street, City, Country</span>
+                  <span className="text-white/80">
+                    123 Travel Street, City, Country
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <svg
@@ -642,7 +706,6 @@ export default function HomePage() {
                     <rect x="2" y="4" width="20" height="16" rx="2"></rect>
                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                   </svg>
-             
                 </li>
               </ul>
             </div>
@@ -650,17 +713,12 @@ export default function HomePage() {
 
           <div className="border-t border-white/20 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-white/80">
-              &copy; {new Date().getFullYear()} Circle Trip Travel. All rights reserved.
+              &copy; {new Date().getFullYear()} Circle Trip Travel. All rights
+              reserved.
             </p>
-            <div className="flex gap-4 mt-4 md:mt-0">
-              <Image src="/bg.jpeg" alt="Visa" width={50} height={30} className="h-8" loading="lazy" />
-              <Image src="/bg.jpeg" alt="Mastercard" width={50} height={30} className="h-8" loading="lazy" />
-              <Image src="/bg.jpeg" alt="PayPal" width={50} height={30} className="h-8" loading="lazy" />
-              <Image src="/bg.jpeg" alt="American Express" width={50} height={30} className="h-8" loading="lazy" />
-            </div>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }

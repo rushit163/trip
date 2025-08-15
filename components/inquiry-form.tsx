@@ -1,43 +1,54 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Separator } from "@/components/ui/separator"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
 
 interface InquiryFormProps {
-  packageTitle: string
-  packagePrice: number
-  packageDuration: number
-  children: React.ReactNode
+  packageTitle: string;
+  packagePrice: number;
+  packageDuration: number;
+  children: React.ReactNode;
 }
 
-export function InquiryForm({ packageTitle, packagePrice, packageDuration, children }: InquiryFormProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+export function InquiryForm({
+  packageTitle,
+  packagePrice,
+  packageDuration,
+  children,
+}: InquiryFormProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-  })
-  const router = useRouter()
+  });
+  const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
     // Prepare the complete inquiry data
     const inquiryData = {
@@ -48,29 +59,29 @@ export function InquiryForm({ packageTitle, packagePrice, packageDuration, child
         duration: packageDuration,
       },
       submittedAt: new Date().toISOString(),
-    }
+    };
 
     // Console log the data as requested
-    console.log("Inquiry Form Submission:", inquiryData)
+    console.log("Inquiry Form Submission:", inquiryData);
 
     // Simulate form submission delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Close the dialog
-    setIsOpen(false)
+    setIsOpen(false);
 
     // Reset form
     setFormData({
       name: "",
       email: "",
       phone: "",
-    })
+    });
 
-    setIsSubmitting(false)
+    setIsSubmitting(false);
 
     // Redirect to home page
-    router.push("/")
-  }
+    router.push("/");
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -83,7 +94,9 @@ export function InquiryForm({ packageTitle, packagePrice, packageDuration, child
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Package Details (Read-only) */}
           <div className="space-y-3">
-            <Label className="text-sm font-medium text-gray-700">Package Details</Label>
+            <Label className="text-sm font-medium text-gray-700">
+              Package Details
+            </Label>
             <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
               <Input
                 value={packageTitle}
@@ -109,7 +122,9 @@ export function InquiryForm({ packageTitle, packagePrice, packageDuration, child
 
           {/* Personal Information */}
           <div className="space-y-3">
-            <Label className="text-sm font-medium text-gray-700">Your Information</Label>
+            <Label className="text-sm font-medium text-gray-700">
+              Your Information
+            </Label>
 
             <div>
               <Label htmlFor="name" className="text-sm text-gray-600">
@@ -184,9 +199,10 @@ export function InquiryForm({ packageTitle, packagePrice, packageDuration, child
         </form>
 
         <div className="text-xs text-gray-500 text-center mt-4">
-          Our travel experts will contact you within 24 hours to discuss your requirements.
+          Our travel experts will contact you within 24 hours to discuss your
+          requirements.
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

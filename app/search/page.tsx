@@ -1,105 +1,122 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useCallback, useRef } from "react"
-import { useSearchParams } from "next/navigation"
-import Image from "next/image"
-import Link from "next/link"
-import { MapPin, Star, Users, Calendar, Filter, X } from "lucide-react"
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useSearchParams } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { MapPin, Star, Users, Calendar, Filter, X } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Navbar } from "@/components/navbar"
-import packagesData from "@/data/packages.json"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Navbar } from "@/components/navbar";
+import packagesData from "@/data/packages.json";
 
 export default function SearchPage() {
-  const searchParams = useSearchParams()
-  const [isLoading, setIsLoading] = useState(true)
-  const [isInitialized, setIsInitialized] = useState(false)
+  const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Search state
-  const [searchQuery, setSearchQuery] = useState("")
-  const [searchReferences, setSearchReferences] = useState<string[]>([])
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchReferences, setSearchReferences] = useState<string[]>([]);
 
   // Filter state
-  const [sortBy, setSortBy] = useState("relevance")
-  const [priceRange, setPriceRange] = useState([0, 50000])
-  const [durationRange, setDurationRange] = useState([1, 20])
-  const [selectedRating, setSelectedRating] = useState(0)
+  const [sortBy, setSortBy] = useState("relevance");
+  const [priceRange, setPriceRange] = useState([0, 50000]);
+  const [durationRange, setDurationRange] = useState([1, 20]);
+  const [selectedRating, setSelectedRating] = useState(0);
 
   // Results state
-  const [filteredPackages, setFilteredPackages] = useState(packagesData)
+  const [filteredPackages, setFilteredPackages] = useState(packagesData);
 
   // Use refs to track previous values to prevent infinite loops
-  const prevSearchParamsRef = useRef<string>("")
+  const prevSearchParamsRef = useRef<string>("");
 
   // Initialize from URL parameters only when they actually change
   useEffect(() => {
-    const currentSearchParams = searchParams.toString()
+    const currentSearchParams = searchParams.toString();
     // Only update if search params actually changed
     if (currentSearchParams !== prevSearchParamsRef.current) {
-      const query = searchParams.get("q") || ""
-      const refs = searchParams.get("refs") || ""
-      setSearchQuery(query)
-      
-      // Reset filters when search params change (new search)
-      setSortBy("relevance")
-      setPriceRange([0, 200000])
-      setDurationRange([1, 20])
-      setSelectedRating(0)
+      const query = searchParams.get("q") || "";
+      const refs = searchParams.get("refs") || "";
+      setSearchQuery(query);
 
-      setIsInitialized(true)
-      prevSearchParamsRef.current = currentSearchParams
+      // Reset filters when search params change (new search)
+      setSortBy("relevance");
+      setPriceRange([0, 200000]);
+      setDurationRange([1, 20]);
+      setSelectedRating(0);
+
+      setIsInitialized(true);
+      prevSearchParamsRef.current = currentSearchParams;
     }
-  }, [searchParams])
+  }, [searchParams]);
 
   // Perform search function
-  const performSearch = useCallback(async (query: string, references: string[], filters: any) => {
-    setIsLoading(true)
+  const performSearch = useCallback(
+    async (query: string, references: string[], filters: any) => {
+      setIsLoading(true);
 
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 300))
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
-    let results = packagesData
+      let results = packagesData;
 
-    // Filter by search terms
-    if (query || references.length > 0) {
-      const searchTerms = [query, ...references].filter(Boolean)
-      results = packagesData.filter((pkg) =>
-        searchTerms.some(
-          (term) =>
-            pkg.title.toLowerCase().includes(term.toLowerCase()) ||
-            pkg.location.some((loc) => loc.toLowerCase().includes(term.toLowerCase())) ||
-            pkg.nation.some((nation) => nation.toLowerCase().includes(term.toLowerCase())) ||
-            pkg.continent.toLowerCase().includes(term.toLowerCase()) ||
-            pkg.region.toLowerCase().includes(term.toLowerCase()),
-        ),
-      )
-    }
+      // Filter by search terms
+      if (query || references.length > 0) {
+        const searchTerms = [query, ...references].filter(Boolean);
+        results = packagesData.filter((pkg) =>
+          searchTerms.some(
+            (term) =>
+              pkg.title.toLowerCase().includes(term.toLowerCase()) ||
+              pkg.location.some((loc) =>
+                loc.toLowerCase().includes(term.toLowerCase())
+              ) ||
+              pkg.nation.some((nation) =>
+                nation.toLowerCase().includes(term.toLowerCase())
+              ) ||
+              pkg.continent.toLowerCase().includes(term.toLowerCase()) ||
+              pkg.region.toLowerCase().includes(term.toLowerCase())
+          )
+        );
+      }
 
-    // Apply filters
-    results = results.filter((pkg) => {
-      const matchesPrice = pkg.price >= filters.priceRange[0] && pkg.price <= filters.priceRange[1]
-      const matchesDuration = pkg.duration >= filters.durationRange[0] && pkg.duration <= filters.durationRange[1]
+      // Apply filters
+      results = results.filter((pkg) => {
+        const matchesPrice =
+          pkg.price >= filters.priceRange[0] &&
+          pkg.price <= filters.priceRange[1];
+        const matchesDuration =
+          pkg.duration >= filters.durationRange[0] &&
+          pkg.duration <= filters.durationRange[1];
 
-      return matchesPrice && matchesDuration 
-    })
+        return matchesPrice && matchesDuration;
+      });
 
-    // Apply sorting
-    if (filters.sortBy === "price-low") {
-      results.sort((a, b) => a.price - b.price)
-    } else if (filters.sortBy === "price-high") {
-      results.sort((a, b) => b.price - a.price)
-    }  else if (filters.sortBy === "duration") {
-      results.sort((a, b) => a.duration - b.duration)
-    }
+      // Apply sorting
+      if (filters.sortBy === "price-low") {
+        results.sort((a, b) => a.price - b.price);
+      } else if (filters.sortBy === "price-high") {
+        results.sort((a, b) => b.price - a.price);
+      } else if (filters.sortBy === "duration") {
+        results.sort((a, b) => a.duration - b.duration);
+      }
 
-    setFilteredPackages(results)
-    setIsLoading(false)
-  }, [])
+      setFilteredPackages(results);
+      setIsLoading(false);
+    },
+    []
+  );
 
   // Trigger search when dependencies change
   useEffect(() => {
@@ -109,9 +126,18 @@ export default function SearchPage() {
         priceRange,
         durationRange,
         selectedRating,
-      })
+      });
     }
-  }, [searchQuery, searchReferences, sortBy, priceRange, durationRange, selectedRating, isInitialized, performSearch])
+  }, [
+    searchQuery,
+    searchReferences,
+    sortBy,
+    priceRange,
+    durationRange,
+    selectedRating,
+    isInitialized,
+    performSearch,
+  ]);
 
   // Show loading screen until initialized
   if (!isInitialized) {
@@ -125,12 +151,12 @@ export default function SearchPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   const removeReference = (ref: string) => {
-    setSearchReferences((prev) => prev.filter((r) => r !== ref))
-  }
+    setSearchReferences((prev) => prev.filter((r) => r !== ref));
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -145,21 +171,29 @@ export default function SearchPage() {
                 <div className="bg-white rounded-lg border border-gray-200 p-6">
                   <div className="flex items-center gap-2 mb-6">
                     <Filter className="h-5 w-5 text-blue-600" />
-                    <h2 className="text-lg font-semibold text-blue-600">Filters</h2>
+                    <h2 className="text-lg font-semibold text-blue-600">
+                      Filters
+                    </h2>
                   </div>
 
                   <div className="space-y-6">
                     {/* Sort By */}
                     <div>
-                      <Label className="text-sm font-medium mb-3 block">Sort By</Label>
+                      <Label className="text-sm font-medium mb-3 block">
+                        Sort By
+                      </Label>
                       <Select value={sortBy} onValueChange={setSortBy}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="relevance">Relevance</SelectItem>
-                          <SelectItem value="price-low">Price: Low to High</SelectItem>
-                          <SelectItem value="price-high">Price: High to Low</SelectItem>
+                          <SelectItem value="price-low">
+                            Price: Low to High
+                          </SelectItem>
+                          <SelectItem value="price-high">
+                            Price: High to Low
+                          </SelectItem>
                           <SelectItem value="rating">Rating</SelectItem>
                           <SelectItem value="duration">Duration</SelectItem>
                         </SelectContent>
@@ -169,7 +203,8 @@ export default function SearchPage() {
                     {/* Price Range */}
                     <div>
                       <Label className="text-sm font-medium mb-3 block">
-                        Price Range: ₹{priceRange[0].toLocaleString()} - ₹{priceRange[1].toLocaleString()}
+                        Price Range: ₹{priceRange[0].toLocaleString()} - ₹
+                        {priceRange[1].toLocaleString()}
                       </Label>
                       <Slider
                         value={priceRange}
@@ -198,10 +233,14 @@ export default function SearchPage() {
 
                     {/* Rating Filter */}
                     <div>
-                      <Label className="text-sm font-medium mb-3 block">Minimum Rating</Label>
+                      <Label className="text-sm font-medium mb-3 block">
+                        Minimum Rating
+                      </Label>
                       <Select
                         value={selectedRating.toString()}
-                        onValueChange={(value) => setSelectedRating(Number(value))}
+                        onValueChange={(value) =>
+                          setSelectedRating(Number(value))
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -244,10 +283,14 @@ export default function SearchPage() {
               <div className="flex justify-between items-center mb-6">
                 <div>
                   <h1 className="text-2xl font-bold text-blue-600">
-                    {searchQuery || searchReferences.length > 0 ? "Search Results" : "All Packages"}
+                    {searchQuery || searchReferences.length > 0
+                      ? "Search Results"
+                      : "All Packages"}
                   </h1>
                   <p className="text-gray-600 mt-1">
-                    {isLoading ? "Searching..." : `${filteredPackages.length} packages found`}
+                    {isLoading
+                      ? "Searching..."
+                      : `${filteredPackages.length} packages found`}
                   </p>
                 </div>
               </div>
@@ -278,7 +321,9 @@ export default function SearchPage() {
                       </div>
                       <CardContent className="p-5">
                         <div className="flex justify-between items-start mb-2">
-                          <h3 className="font-bold text-lg text-blue-600">{pkg.title}</h3>
+                          <h3 className="font-bold text-lg text-blue-600">
+                            {pkg.title}
+                          </h3>
                           <div className="flex items-center">
                             <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                             <span className="text-sm ml-1">{pkg.rating}</span>
@@ -287,8 +332,10 @@ export default function SearchPage() {
                         <div className="flex items-center text-gray-600 mb-3">
                           <MapPin className="h-4 w-4 mr-1" />
                           <span className="text-sm">
-                            {pkg.nation.join(", ")} • {pkg.location.slice(0, 2).join(", ")}
-                            {pkg.location.length > 2 && ` +${pkg.location.length - 2} more`}
+                            {pkg.nation.join(", ")} •{" "}
+                            {pkg.location.slice(0, 2).join(", ")}
+                            {pkg.location.length > 2 &&
+                              ` +${pkg.location.length - 2} more`}
                           </span>
                         </div>
                         <div className="flex items-center gap-4 text-sm mb-4">
@@ -303,11 +350,19 @@ export default function SearchPage() {
                         </div>
                         <div className="flex justify-between items-center">
                           <div>
-                            <span className="text-xl font-bold text-blue-600">₹{pkg.price.toLocaleString()}</span>
-                            <span className="text-gray-600 text-sm"> / person</span>
+                            <span className="text-xl font-bold text-blue-600">
+                              ₹{pkg.price.toLocaleString()}
+                            </span>
+                            <span className="text-gray-600 text-sm">
+                              {" "}
+                              / person
+                            </span>
                           </div>
                           <Link href={`/packages/${pkg.slug}`}>
-                            <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white">
+                            <Button
+                              size="sm"
+                              className="bg-orange-500 hover:bg-orange-600 text-white"
+                            >
                               View Details
                             </Button>
                           </Link>
@@ -322,7 +377,12 @@ export default function SearchPage() {
               {!isLoading && filteredPackages.length === 0 && (
                 <div className="text-center py-12">
                   <div className="text-gray-400 mb-4">
-                    <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg
+                      className="mx-auto h-12 w-12"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -331,8 +391,12 @@ export default function SearchPage() {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No packages found</h3>
-                  <p className="text-gray-600">Try adjusting your search terms or filters.</p>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    No packages found
+                  </h3>
+                  <p className="text-gray-600">
+                    Try adjusting your search terms or filters.
+                  </p>
                 </div>
               )}
             </div>
@@ -340,5 +404,5 @@ export default function SearchPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }
