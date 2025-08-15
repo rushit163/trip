@@ -4,9 +4,12 @@ import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.dev',
+  title: 'Circle Trip',
+  description: 'Travel the world with Circle Trip - your gateway to unforgettable journeys and adventures.',
+  generator: 'Next.js',
+  icons: {
+                icon: '/Logo2.png', 
+              },
 }
 
 export default function RootLayout({
