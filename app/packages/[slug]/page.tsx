@@ -73,6 +73,9 @@ const GalleryPagination = ({
   );
 };
 
+export const runtime = 'edge';
+
+
 export default function PackagePage({
   params,
 }: {
