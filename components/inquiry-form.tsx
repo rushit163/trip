@@ -1,6 +1,7 @@
 "use client";
 
 import type React from "react";
+import axios from "axios";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -15,6 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { ca } from "date-fns/locale";
 
 interface InquiryFormProps {
   packageTitle: string;
@@ -35,6 +37,9 @@ export function InquiryForm({
     name: "",
     email: "",
     phone: "",
+    title: packageTitle,
+    price: packagePrice,
+    duration: packageDuration,
   });
   const router = useRouter();
 
@@ -46,43 +51,90 @@ export function InquiryForm({
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  //   const handleSubmit =  async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setIsSubmitting(true);
+
+  //   // Prepare the complete inquiry data
+  //   const inquiryData = {
+  //     ...formData,
+  //     packageDetails: {
+  //       title: packageTitle,
+  //       price: packagePrice,
+  //       duration: packageDuration,
+  //     },
+  //     submittedAt: new Date().toISOString(),
+  //   };
+
+  //   console.log("Submitting to Google Apps Script...");
+  //   console.log("Inquiry Form Submission:", inquiryData);
+
+  //   const res = await fetch("https://script.google.com/macros/s/AKfycby6lKTzLBmcZxdmBCiP-InRk_BbfPMogeg56ezR5egvswburlMQMID1edGHwUiEeG_a/exec", {
+  //       method: "POST",
+  //       body: JSON.stringify(inquiryData),
+  //     })
+  //       .then(res => res.text())
+  //       .then(data => {
+  //         alert("Form submitted successfully!");
+  //       })
+  //       .catch(err => {
+  //         console.error(err);
+  //         alert("Something went wrong.");
+  //       });
+  //   console.log("Response from Google Apps Script:", res);
+  //   // Close the dialog
+  //   setIsOpen(false);
+
+  //   // Reset form
+  //   setFormData({
+  //     name: "",
+  //     email: "",
+  //     phone: "",
+  //   });
+
+  //   setIsSubmitting(false);
+
+  //   // Redirect to home page
+  //   router.push("/");
+  // };
+
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     setIsSubmitting(true);
+    const GSHEET_URL: string = process.env.NEXT_PUBLIC_GOOGLE_SHEET_URL || "https://your-default-url.com";
+    fetch(
+      GSHEET_URL,
+      {
+        method: "POST",
+        body: JSON.stringify(formData),
+      }
+    )
+      .then((res) => res.text())
+      .then((data) => {
+        alert("Form submitted successfully!");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          title: packageTitle,
+          price: packagePrice,
+          duration: packageDuration,
+        });
+        setIsSubmitting(false);
+        setIsOpen(false);
+        router.push("/");
+        return;
+      })
+      .catch((err) => {
+        console.error("Error submitting form:", err);
+        alert("Something went wrong. Please try again later.");
+        setIsSubmitting(false);
+        setIsOpen(false);
+        return;
+      });
 
-    // Prepare the complete inquiry data
-    const inquiryData = {
-      ...formData,
-      packageDetails: {
-        title: packageTitle,
-        price: packagePrice,
-        duration: packageDuration,
-      },
-      submittedAt: new Date().toISOString(),
-    };
 
-    // Console log the data as requested
-    console.log("Inquiry Form Submission:", inquiryData);
-
-    // Simulate form submission delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Close the dialog
-    setIsOpen(false);
-
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-    });
-
-    setIsSubmitting(false);
-
-    // Redirect to home page
-    router.push("/");
   };
-
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -91,7 +143,7 @@ export function InquiryForm({
           <DialogTitle className="text-blue-600">Package Inquiry</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Package Details (Read-only) */}
           <div className="space-y-3">
             <Label className="text-sm font-medium text-gray-700">

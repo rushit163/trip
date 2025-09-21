@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight, MapPin, Star, Users, Calendar } from "lucide-react";
@@ -84,8 +85,14 @@ export default function HomePage() {
                   variant="outline"
                   size="lg"
                   className="w-full sm:w-auto bg-white/10 backdrop-blur-sm text-white border-white hover:bg-white/20"
+                  onClick={() => {
+                  const footer = document.getElementById("contact-footer");
+                  if (footer) {
+                    footer.scrollIntoView({ behavior: "smooth" });
+                  }
+                  }}
                 >
-                  Learn More
+                  Contact US
                 </Button>
               </div>
             </div>
@@ -505,9 +512,9 @@ export default function HomePage() {
         </section> */}
       </main>
 
-      <footer className="bg-blue-600 text-white">
+      <footer className="bg-blue-600 text-white" id="contact-footer">
         <div className="container py-12 md:py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="flex flex-col lg:flex-row justify-between gap-8 items-start">
             <div>
               <div className="flex items-center gap-2 font-bold text-xl mb-4">
                 <span className="text-white">Circle</span>
@@ -578,7 +585,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div>
+            {/* <div>
               <h3 className="font-bold mb-4 text-white">Quick Links</h3>
               <ul className="space-y-2">
                 <li>
@@ -612,9 +619,9 @@ export default function HomePage() {
                   </Link>
                 </li>
               </ul>
-            </div>
+            </div> */}
 
-            <div>
+            {/* <div>
               <h3 className="font-bold mb-4 text-white">Support</h3>
               <ul className="space-y-2">
                 <li>
@@ -648,7 +655,7 @@ export default function HomePage() {
                   </Link>
                 </li>
               </ul>
-            </div>
+            </div> */}
 
             <div>
               <h3 className="font-bold mb-4 text-white">Contact Info</h3>
